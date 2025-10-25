@@ -1,0 +1,132 @@
+#include <stdio.h>
+#include <string.h> // Incluída conforme instruções
+#include <stdlib.h> // Embora não estritamente necessário para este nível, é boa prática
+
+// War Estruturado – Nível Novato
+// Etapa 1: Cadastro de Territórios
+// Este programa cadastra 5 territórios, solicitando nome, cor e número de tropas.
+
+// ------------------------------------------------
+// Constantes e Estrutura de Dados
+// ------------------------------------------------
+
+// Capacidade para armazenar 5 estruturas do tipo Territorio.
+#define NUM_TERRITORIOS 5 
+
+/**
+ * Definição da struct Territorio (Requisito Funcional: Criação da struct).
+ * Armazena informações essenciais para cada área do mapa.
+ */
+typedef struct {
+    char nome[30];  // Nome do território (campo char nome[30])
+    char cor[10];   // Cor do exército que o ocupa (campo char cor[10])
+    int tropas;     // Quantidade de tropas no território (campo int tropas)
+} Territorio;
+
+// ------------------------------------------------
+// Variáveis Globais (Vetor de Structs)
+// ------------------------------------------------
+
+// Declaração de vetor de structs: O mapa do jogo.
+Territorio mapa[NUM_TERRITORIOS];
+
+// ------------------------------------------------
+// Funções Auxiliares
+// ------------------------------------------------
+
+/**
+ * Limpa o buffer de entrada do teclado.
+ * Usado para garantir que caracteres residuais (como o '\n' após scanf)
+ * não interfiram nas próximas leituras de string (scanf("%s")).
+ */
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
+/**
+ * Realiza o cadastro de todos os territórios.
+ * (Requisito Funcional: Cadastro dos territórios | Instrução: Entrada dos dados)
+ */
+void cadastrarTerritorios() {
+    printf("--- Cadastro de %d Territórios ---\n", NUM_TERRITORIOS);
+    
+    // Entrada dos dados: Utiliza um laço for para preencher os 5 territórios.
+    for (int i = 0; i < NUM_TERRITORIOS; i++) {
+        printf("\nTerritório %d:\n", i + 1);
+
+        // 1. Nome do território
+        // Uso de scanf("%s") com cuidado para strings (Requisito Técnico Adicional).
+        // Nota: "%s" lê até o primeiro espaço em branco, o que é aceitável no Nível Novato.
+        printf("  Nome: ");
+        if (scanf("%29s", mapa[i].nome) != 1) {
+            printf("[ERRO] Falha na leitura do nome.\n");
+            limparBuffer();
+            i--; // Tenta preencher o mesmo território novamente
+            continue;
+        }
+
+        // 2. Cor do exército
+        printf("  Cor do Exército (ex: Vermelho): ");
+        if (scanf("%9s", mapa[i].cor) != 1) {
+            printf("[ERRO] Falha na leitura da cor.\n");
+            limparBuffer();
+            i--;
+            continue;
+        }
+
+        // 3. Número de tropas (Requisito Técnico Adicional: Use scanf)
+        printf("  Número de Tropas: ");
+        if (scanf("%d", &mapa[i].tropas) != 1 || mapa[i].tropas < 0) {
+            printf("[ERRO] Número de tropas inválido. Use um valor inteiro não negativo.\n");
+            limparBuffer();
+            i--;
+            continue;
+        }
+        
+        // Limpa o buffer após o último scanf, caso a próxima operação use fgets
+        // ou se o loop for encerrado.
+        limparBuffer(); 
+    }
+    printf("\n[SUCESSO] Cadastro de territórios concluído!\n");
+}
+
+
+/**
+ * Exibe os dados de todos os territórios cadastrados.
+ * (Requisito Funcional: Exibição dos dados | Instrução: Exibição)
+ */
+void exibirDados() {
+    printf("\n================================================\n");
+    printf("         RELATÓRIO DE TERRITÓRIOS CADASTRADOS     \n");
+    printf("================================================\n");
+    printf("Pos | Nome                      | Cor        | Tropas\n");
+    printf("----------------------------------------------------\n");
+
+    // Exibição: Percorre o vetor e exibe os dados de cada território.
+    for (int i = 0; i < NUM_TERRITORIOS; i++) {
+        // Uso da struct Territorio para acessar os campos com formatação clara.
+        printf("%02d  | %-25s | %-10s | %d\n",
+               i + 1, mapa[i].nome, mapa[i].cor, mapa[i].tropas);
+    }
+    printf("================================================\n");
+}
+
+
+// ------------------------------------------------
+// Função Principal
+// ------------------------------------------------
+
+int main() {
+    printf("--- War Estruturado - Nível Novato: Cadastro Inicial ---\n");
+    
+    // Lógica do laço de entrada:
+    cadastrarTerritorios();
+
+    // Lógica do laço de saída (exibição):
+    exibirDados();
+    
+    printf("\nPrograma finalizado.\n");
+
+    return 0;
+}
